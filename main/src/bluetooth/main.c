@@ -47,8 +47,7 @@ static void bluetooth_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t 
         break;
 #endif
     case ESP_BT_GAP_MODE_CHG_EVT:
-        // TODO: Change to debug?
-        DT_INFO("GAP mode changed: %d", param->mode_chg.mode);
+        DT_DEBUG("GAP mode changed: %d", param->mode_chg.mode);
         break;
     default:
         break;
@@ -57,21 +56,6 @@ static void bluetooth_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t 
 
 int bluetooth_init(void) {
     esp_err_t ret;
-
-    // TODO: move flash initialization outside
-    ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        DT_WARNING("Flash full or new version found, need to erase...");
-        if ((ret = nvs_flash_erase()) != ESP_OK) {
-            DT_ERROR("Flash erase failed: " DT_ESP_ERR_FORMAT, DT_ESP_ERR(ret));
-            return 1;
-        }
-        ret = nvs_flash_init();
-    }
-
-    if (ret != ESP_OK) {
-        DT_ERROR("Failed to initialize flash: " DT_ESP_ERR_FORMAT, DT_ESP_ERR(ret));
-    }
 
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     if ((ret = esp_bt_controller_init(&bt_cfg)) != ESP_OK) {
