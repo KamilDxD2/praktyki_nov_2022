@@ -1,11 +1,9 @@
 idf_component_register(SRCS 
-                    display/DEV_Config.cpp
-                    display/EPD_2in13_V3.cpp
-                    display/font8.cpp
-                    display/font16.cpp
-                    display/Gui_Paint.cpp
-                    display/display_main.cpp
-                    config/persistconfig.cpp
-                    DeskThing.cpp
+                    src/display/DEV_Config.cpp
+                    src/display/EPD_2in13_V3.cpp
+                    src/display/font8.cpp
+                    src/display/font16.cpp
+                    src/display/Gui_Paint.cpp
+                    src/display/display_main.cpp
                     
                     INCLUDE_DIRS ".")
