@@ -5,6 +5,7 @@ idf_component_register(SRCS
     src/display/font16.cpp
     src/display/Gui_Paint.cpp
     src/display/display_main.cpp
+    src/config/persistconfig.cpp
     src/bluetooth/main.c
     src/bluetooth/hid.c
     INCLUDE_DIRS ".")
