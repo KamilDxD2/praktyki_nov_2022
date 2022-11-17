@@ -6,6 +6,10 @@
 #include "freertos/FreeRTOS.h"
 #include "esp_hidd_api.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum bluetooth_device_state {
     BT_DEVICE_CONNECTED,
     BT_DEVICE_DISCONNECTED
@@ -16,5 +20,9 @@ typedef void (*bluetooth_device_state_cb_t)(enum bluetooth_device_state state, e
 void bluetooth_set_device_state_cb(bluetooth_device_state_cb_t cb);
 BaseType_t bluetooth_start_autoreconnect_task(void);
 void bluetooth_hid_cb(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *param);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _BLUETOOTH__HID_H_INCLUDED
