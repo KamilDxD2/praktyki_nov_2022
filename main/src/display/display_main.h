@@ -1,3 +1,5 @@
+#pragma once
+
 #include "EPD.h"
 #include "DEV_Config.h"
 #include "freertos/FreeRTOS.h"
