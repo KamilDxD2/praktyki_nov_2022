@@ -6,7 +6,7 @@ uint8_t image[128 * 256 / 8];
 
 Display::Position centerText(int textLength, int offsetY, int charWidth, int charHeight){
     Display::Position pos;
-    int textWidth = (charWidth+1) * textLength;
+    int textWidth = (charWidth+1+4) * textLength - textLength;
     pos.x = 0;
     pos.x += (EPD_2in13_V3_HEIGHT - textWidth) / 2;
     pos.y = 0;
@@ -29,8 +29,8 @@ void mainDisplayTask(void* pvParameters){
                 free(incoming.bottom);
             }
             if(incoming.main != NULL){
-                centered = centerText(strlen(incoming.main), 0, 5*8, 8*8);
-                Paint_DrawString_EN(centered.x, centered.y, incoming.main, &Font8, 1, 0, 8);
+                centered = centerText(strlen(incoming.main), 0, 5*6, 8*6);
+                Paint_DrawString_EN(centered.x, centered.y, incoming.main, &Font8, 1, 0, 6);
                 free(incoming.main);
             }
             if(incoming.top != NULL){
