@@ -615,18 +615,8 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char * pString,
     UWORD Xpoint = Xstart;
     UWORD Ypoint = Ystart;
 
-    if (Xstart > Paint.Width || Ystart > Paint.Height) {
-        DT_DEBUG("Paint_DrawString_EN Input exceeds the normal display range\r\n");
-        printf("X = %d, mX = %d, Y = %d, mY = %d\n", Xstart, Paint.Width, Ystart, Paint.Height);
-        return;
-    }
-
     while (* pString != '\0') {
         //if X direction filled , reposition to(Xstart,Ypoint),Ypoint is Y direction plus the Height of the character
-        if ((Xpoint + Font->Width ) > Paint.Width ) {
-            Xpoint = Xstart;
-            Ypoint += Font->Height * scale;
-        }
 
         // If the Y direction is full, reposition to(Xstart, Ystart)
         if ((Ypoint  + Font->Height ) > Paint.Height ) {
