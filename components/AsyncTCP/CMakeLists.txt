@@ -3,4 +3,6 @@ idf_component_register(
     "module/src"
     SRCS
     "module/src/AsyncTCP.cpp"
+    REQUIRES
+    arduino
 )

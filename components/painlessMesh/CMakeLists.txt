@@ -7,4 +7,8 @@ idf_component_register(
     "module/src/wifi.cpp"
     REQUIRES
     arduino
+    ArduinoJson
+    AsyncTCP
+    PRIV_REQUIRES
+    TaskScheduler
 )
