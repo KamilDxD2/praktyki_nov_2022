@@ -2,3 +2,7 @@
 	path = components/arduino
 	url = https://github.com/espressif/arduino-esp32.git
 	shallow = true
+[submodule "components/painlessMesh/module"]
+	path = components/painlessMesh/module
+	url = https://gitlab.com/painlessMesh/painlessMesh.git
+	shallow = true
