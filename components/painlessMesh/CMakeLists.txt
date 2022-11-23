@@ -1,0 +1,14 @@
+idf_component_register(
+    INCLUDE_DIRS
+    "module/src"
+    SRCS
+    "module/src/painlessMeshSTA.cpp"
+    "module/src/scheduler.cpp"
+    "module/src/wifi.cpp"
+    REQUIRES
+    arduino
+    ArduinoJson
+    AsyncTCP
+    PRIV_REQUIRES
+    TaskScheduler
+)
