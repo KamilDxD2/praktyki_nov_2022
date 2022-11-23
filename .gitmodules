@@ -14,3 +14,6 @@
 	path = components/TaskScheduler/module
 	url = https://github.com/arkhipenko/TaskScheduler.git
 	shallow = true
+[submodule "components/AsyncTCP/module"]
+	path = components/AsyncTCP/module
+	url = https://github.com/me-no-dev/AsyncTCP.git
