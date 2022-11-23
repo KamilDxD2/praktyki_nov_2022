@@ -6,3 +6,7 @@
 	path = components/painlessMesh/module
 	url = https://gitlab.com/painlessMesh/painlessMesh.git
 	shallow = true
+[submodule "components/ArduinoJson"]
+	path = components/ArduinoJson
+	url = https://github.com/bblanchon/ArduinoJson.git
+	shallow = true
