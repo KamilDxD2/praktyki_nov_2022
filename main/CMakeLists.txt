@@ -10,5 +10,7 @@ idf_component_register(SRCS
     src/bluetooth/hid_dev.c
     src/bluetooth/esp_hidd_prf_api.c
     src/bluetooth/hid_device_le_prf.c
-    src/override-arduino-bluetooth.c
+    src/arduino_init.c
+    src/main.c
+    src/meshTest.cpp
     INCLUDE_DIRS ".")
