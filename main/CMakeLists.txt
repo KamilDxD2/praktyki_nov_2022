@@ -11,5 +11,4 @@ idf_component_register(SRCS
     src/bluetooth/esp_hidd_prf_api.c
     src/bluetooth/hid_device_le_prf.c
     src/arduino_init.c
-    src/meshTest.cpp
     INCLUDE_DIRS ".")
