@@ -2,5 +2,5 @@ idf_component_register(
     INCLUDE_DIRS
     "module/src"
     SRCS
-    "module/src"
+    "module/src/AsyncTCP.cpp"
 )
