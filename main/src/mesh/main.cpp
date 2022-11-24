@@ -40,7 +40,6 @@ uint32_t getCurrentID(){
 
 void meshInit(){
   //Setup code here:
-  Serial.print("\nSetup");
   mesh.setDebugMsgTypes( ERROR | STARTUP );  
   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
   mesh.onReceive(&receivedCallback);
@@ -49,7 +48,6 @@ void meshInit(){
   // Loop replacement
   xTaskCreate([](void* unused){
     for(;;){
-      Serial.print("\nLoop");
       mesh.update();
       vTaskDelay(100 / portTICK_PERIOD_MS);
     }
@@ -58,31 +56,6 @@ void meshInit(){
 
 ////////////////////////////INTERFACE////////////////////////////
 
-// __attribute__((noreturn)) void test(bool ask){
-//   init();
-//   Serial.print("\nTesting");
-//   setStateUpdateCallback([](uint32_t id, uint8_t *data){
-//     printf("Received data from %d: %s\n", id, (char*) data);
-//     free((void*) data);
-//   });
-//   if(ask)
-//     requestAllStates();
-  
-//   // ( ||+|| )\(;;)
-//   for(;;);
-// }
-
-
-// Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
-
-// void sendMessage() {
-//   mesh.sendBroadcast( msgToSend );
-//   nodes = mesh.getNodeList();
-//   Serial.print("\nNr of nodes: ");
-//   Serial.print(nodes.size());
-//   Serial.print("\n");
-//   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
-// }
 
 
 void receivedCallback( uint32_t from, String &msg ) {
@@ -96,40 +69,5 @@ void receivedCallback( uint32_t from, String &msg ) {
     if(callback)
       callback(from, (uint8_t*) msg.c_str() + 1);
     break;
-  default:
-    Serial.print("\n==== def ====\n");
+  }
 }
-}
-
-void newConnectionCallback(uint32_t nodeId) {
-    Serial.printf("--> startHere: New Connection, nodeId = %u\n", nodeId);
-}
-
-void changedConnectionCallback() {
-  Serial.printf("Changed connections\n");
-}
-
-void nodeTimeAdjustedCallback(int32_t offset) {
-    Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
-}
-
-// void setup() {
-//   Serial.begin(115200);
-
-
-//   mesh.setDebugMsgTypes( ERROR | STARTUP );  
-
-//   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
-//   mesh.onReceive(&receivedCallback);
-//   // mesh.onNewConnection(&newConnectionCallback);
-//   // mesh.onChangedConnections(&changedConnectionCallback);
-//   // mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
-
-//   userScheduler.addTask( taskSendMessage );
-//   taskSendMessage.enable();
-// }
-
-// void loop() {
-  
-//   mesh.update();
-// }
