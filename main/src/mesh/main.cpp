@@ -1,5 +1,4 @@
 #include "painlessMesh.h"
-#include <esp_http_server.h>
 
 #define   MESH_PREFIX     "MegaGigaSiecESP32"
 #define   MESH_PASSWORD   "papiez2137"
@@ -8,12 +7,7 @@
 Scheduler userScheduler; 
 painlessMesh  mesh;
 
-String msgToSend = "0";
-SimpleList<uint32_t> nodes;
-std::list<String> data;
-
 void receivedCallback(uint32_t from, String &msg);
-void test(bool ask);
 
 ////////////////////////////INTERFACE////////////////////////////
 typedef void (*StateUpdateCallback)(uint32_t id, uint8_t* data);
@@ -53,9 +47,7 @@ void meshInit(){
     }
   }, "Mesh Updates", 2 * 1024, NULL, configMAX_PRIORITIES-1, &meshUpdateTask);
 }
-
 ////////////////////////////INTERFACE////////////////////////////
-
 
 
 void receivedCallback( uint32_t from, String &msg ) {
