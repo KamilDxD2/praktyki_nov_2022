@@ -10,10 +10,15 @@
 #include "fonts.h"
 
 namespace Display{
+    extern char currentTop[256];
+    extern char currentMain[256];
+    extern char currentBottom[256];
+
     struct DisplayUpdate{
         char *top = NULL;
         char *main = NULL;
         char *bottom = NULL;
+        char wifiIconVisible = 0xFF;
     };
 
     struct Position{

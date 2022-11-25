@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: black;
+            font-family: "Trebuchet MS", sans-serif;
+            z-index: 1;
+        }
+
+        .device {
+            margin-left: 50px;
+            width: 20rem;
+            background-color: rgb(255, 255, 255);
+            border-radius: 1rem;
+            padding: .5rem;
+            margin: 1rem;
+            position: relative;
+            color: black;
+            transition: .3s ease-in-out;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+
+        }
+
+        .time {
+            font-weight: 800;
+            font-size: 3rem;
+            flex-grow: 2;
+        }
+
+        .dot {
+            padding: 10px;
+            border-radius: 50%;
+            position: absolute;
+            top: 8px;
+            left: 8px;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        #bar {
+            width: 100%;
+            color: #f84018;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            padding-top: 1rem;
+            transition: .3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            color: white;
+        }
+
+        fieldset {
+            color: white;
+            border: none;
+            border-top: 1px solid white;
+            margin: 1rem 1rem 4rem 1rem;
+        }
+
+        legend {
+            margin: 1rem 1rem;
+            padding: 0 1rem;
+        }
+
+        #connected {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 0 2rem;
+            justify-content: center;
+        }
+
+        #configurable {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;padding: 0 2rem;
+            justify-content: center;
+
+        }
+
+        #configurable .device:hover {
+            background-color: rgb(223, 223, 223);
+            cursor: pointer;
+            
+        }
+
+        #popup-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 20rem;
+            width: 30rem;
+            margin: calc((100vh - 20rem)/2) calc((100vw - 30rem)/2);
+            background-color: white;
+            z-index: 2137;
+            text-align: center;
+            font-size: 17rem;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 1rem;
+            transition: .3s ease-in-out;
+        }
+
+        #popup-window input {
+            width: 78%;
+            margin: 0 16%;
+            height: 3rem;
+            border: none;
+            border: 2px solid #f84018;
+            text-align: center;
+            border-radius: 1.5rem;
+            transition: .3s ease-in-out;
+            font-size: 1.15rem;
+        }
+
+        input:focus {
+            border-color: black !important;
+            outline: none;
+        }
+
+        #ligma {
+            visibility: hidden;
+            position: fixed;
+            z-index: 2136;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+            opacity: .7;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            border: 2px solid white;
+            background-color: #f84018;
+            color: white;
+            height: 3rem;
+            width: 78%;
+            margin: 0 auto;
+            border-radius: 1.5rem;
+            font-size: 1.15rem;
+            transition: .3s ease-in-out;
+        }
+
+        button:hover {
+            border: 2px solid #f84018;
+            background-color: white;
+            cursor: pointer;
+            color: #f84018;
+        }
+
+        .waldissimo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+        }
+
+        .trueHidden{
+            display: none;
+        }
+
+        #lupka{
+            width: 2rem;
+            height: 2rem;
+        }
+
+        #search{
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #searchbar{
+            color: white;
+            background-color: black;
+            border: none;
+            border: 3px solid white;
+            border-radius: 1rem;
+            height: 2rem;
+            text-align: center;
+            margin-left: 15px;
+            transition: all .3s ease-in-out;
+        }
+
+        #searchbar:focus{
+            border-color: #f84018 !important;
+            outline: none;
+        }
+
+        .greenBackground{
+            background-color: green;
+        }
+        .redBackground{
+            background-color: #f84018;
+        }
+        .yellowBackground{
+            background-color: orange;
+        }
+
+
+        /* #f84018 */
+    </style>
+</head>
+
+<body>
+    <div id="ligma"></div>
+    <div id="bar">
+        <h1 id="walde">Dashboard</h1>
+        <div id="search">
+			<span>🔎</span>
+            <input id="searchbar" class="trueHidden" placeholder="e.g. John Doe" type="text">
+        </div>
+    </div>
+    <fieldset id="configurable">
+        <legend>Cofigurable Devices</legend>
+
+    </fieldset>
+
+    <fieldset id="connected">
+        <legend>Connected Devices</legend>
+
+    </fieldset>
+    <script>
+        let ws;
+
+        function isObject(value) {
+            return typeof (value) === 'object' && value != null;
+        }
+
+        class AmogElement {
+            mount(element) { }
+
+            render() {
+                throw new Error("Unimplemented render() method");
+            }
+        }
+
+        function applyProp(target, prop, value) {
+            console.log("applyProp:", prop, value, "on", target);
+            if (isObject(value)) {
+                applyProps(target[prop], value);
+            } else {
+                target[prop] = value;
+            }
+        }
+
+        function applyProps(target, props) {
+            console.log("applyProps:", props, "on", target);
+            if (isObject(props)) {
+                for (const prop in props) {
+                    const value = props[prop];
+                    applyProp(target, prop, value);
+                }
+            } else {
+                throw new Error("`attributes` must be an object!");
+            }
+        }
+        function d(target) {
+            if (target) {
+                target.remove();
+            }
+        }
+        function childToNode(child) {
+            if (child == null) {
+                return document.createComment("child placeholder");
+            } else if (child instanceof AmogElement) {
+                const element = child.render();
+                element.$amog = child;
+                return element;
+            } else if (child instanceof HTMLElement) {
+                return child;
+            } else if (typeof (child) === 'string') {
+                return document.createTextNode(child);
+            } else {
+                return document.createTextNode(JSON.stringify(child));
+            }
+        }
+
+        function c(tag, attributes, ...children) {
+            const element = document.createElement(tag);
+            applyProps(element, attributes);
+
+            for (const child of children) {
+                element.appendChild(childToNode(child));
+            }
+            return element;
+        }
+
+        function notifyMount(element) {
+            for (const child of element.children) {
+                child.$amog?.mount(child);
+                notifyMount(child);
+            }
+        }
+
+        function mount(element, target) {
+            target.appendChild(childToNode(element));
+            notifyMount(target);
+        }
+
+
+
+        let configurables = document.querySelector("#configurable");
+        let connected = document.querySelector("#connected");
+        let bg = document.querySelector("#ligma");
+        let bar = document.querySelector("#bar");
+        let body = document.body;
+        
+        let devicesFound = {};
+        displayDevices(devicesFound);
+        function displayDevices(obj) {
+            document.querySelectorAll(".device").forEach(d);
+            Object.values(obj).forEach((element, i) => {
+
+                let gamer = c("div", { className: 'device', id: `config-${i}` },
+                    c("div", { className: "flex-container" },
+                        (!element.configurable ? c("div", { className: `dot ${({
+                            1: "greenBackground",
+                            2: "yellowBackground",
+                            3: "redBackground",
+                        })[element.state]}` }) : ""),
+                        c("p", { className: "name" }, element.firstName + " " +  element.lastName),
+                        c("p", { className: "time" }, element.configurable ? "Configurable" : element.time),
+                        c("div", { className: "hidden" }, 'a')
+
+                    )
+                );
+                if (element.configurable) {
+                    gamer.addEventListener('click', () => {
+                        bg.style.visibility = 'visible';
+                        let input, input2, time;
+                        let popup = c("div", { id: 'popup-window' },
+                            c("h2", {}, "Device Configuration"),
+                            (input = c("input", { type: 'text', placeholder: element.firstName },)),
+                            (input2 = c("input", { type: 'text', placeholder: element.lastName },)),
+                            (time = c("input", { type: 'number', value: element.outOfOfficeTime })),
+                            c("button", { onclick: () => { handleConfig({
+                                time: time.value,
+                                firstName: input.value || input.placeholder,
+                                lastName: input2.value || input2.placeholder,
+                                id: element.id,
+                            }) } }, "OK")
+                        );
+                        body.appendChild(popup);
+                    });
+
+                    configurables.appendChild(gamer);
+                } else {
+                    connected.appendChild(gamer);
+                }
+
+            });
+        }
+
+
+
+
+        function closePopup() {
+            bg.style.visibility = 'hidden';
+            if (document.querySelector("#popup-window")) {
+                d(document.querySelector("#popup-window"))
+            }
+        }
+		
+        function handleConfig({id, firstName, lastName, time}) {
+            closePopup();
+            const object = {
+                firstName, lastName,
+                oofTime: time,
+                id,
+            };
+            console.log(object);
+            ws.send(JSON.stringify(object));
+        }
+
+        bg.addEventListener('click', () => {
+            closePopup();
+        });
+
+        let waldek = document.querySelector("#walde");
+        waldek_count = 0;
+        waldek.addEventListener('click', () => {
+            waldek_count++;
+            if (waldek_count % 7 == 0) {
+                let waled = c("img", { className: "waldissimo", size: 'contain', src: "" });
+                body.append(waled);
+                waled.addEventListener('click', () => {
+                    waled.style.width = Math.floor(Math.random() * 100 +2) + "vw";
+                    waled.style.height = Math.floor(Math.random() * 100 +2) + "vh";
+                });
+            }
+        });
+
+        let searchBar = document.querySelector("#search > input");
+        searchBar.addEventListener("input", () => {
+            displayDevices(Object.fromEntries(Object.entries(devicesFound).filter(([id, object]) => searchBar.value.split(" ").some(e => object.firstName.includes(e) || object.lastName.includes(e)))));
+        });
+        
+        let searchIcon = document.querySelector("#search > span");
+        searchIcon.addEventListener("click", () => {
+            searchBar.classList.toggle("trueHidden");
+        });
+
+        let wsInterval = null;
+        function connectWebsocket(){
+            ws = new WebSocket(`ws://${window.location.host}/ws`);
+            ws.onmessage = message => {
+                const { firstName, lastName, minutes, id, outOfOfficeTime, state, configurable } = JSON.parse(message.data);
+                const formattedTime = `${Math.floor(minutes / 60).toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}`;
+				if(id === 0) return;
+                devicesFound[id] = {
+					firstName, lastName,
+                    time: formattedTime,
+                    configurable,
+                    id,
+                    state,
+                    outOfOfficeTime,
+                };
+                displayDevices(devicesFound);
+            };
+            if(wsInterval)
+                clearInterval(wsInterval);
+            wsInterval = setInterval(() => ws.send("A"), 1000);
+            ws.onclose = () => setTimeout(connectWebsocket, 10000);
+        }
+        connectWebsocket();
+        
+
+    </script>
+</body>
+
+</html>
