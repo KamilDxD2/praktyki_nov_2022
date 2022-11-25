@@ -10,5 +10,8 @@ idf_component_register(SRCS
     src/bluetooth/hid_dev.c
     src/bluetooth/esp_hidd_prf_api.c
     src/bluetooth/hid_device_le_prf.c
+    src/mesh/main.cpp
+    src/http/main.cpp
     src/arduino_init.c
+    src/DeskThing.cpp
     INCLUDE_DIRS ".")

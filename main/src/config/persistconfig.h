@@ -8,6 +8,11 @@
 namespace Config{
     void init(void);
     void format(void);
+    struct BlobData{
+        uint8_t *blob;
+        size_t length;
+    };
+
 
     bool hasUint32(const char* name);
     bool hasUint16(const char* name);
@@ -25,7 +30,7 @@ namespace Config{
     int16_t getInt16(const char* name);
     int8_t  getInt8(const char* name);
     char* getString(const char* name);
-    uint8_t* getBlob(const char* name);
+    BlobData getBlob(const char* name);
 
     void setUint32(const char* name, uint32_t v);
     void setUint16(const char* name, uint16_t v);
@@ -33,6 +38,6 @@ namespace Config{
     void setInt32(const char* name, int32_t v);
     void setInt16(const char* name, int16_t v);
     void setInt8(const char* name, int8_t v);
-    void setString(const char* name, char* string);
+    void setString(const char* name, const char* string);
     void setBlob(const char* name, uint8_t *buffer, int length);
 }

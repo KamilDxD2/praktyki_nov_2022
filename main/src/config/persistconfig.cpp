@@ -53,14 +53,17 @@ char* Config::getString(const char *name){
     ESP_ERROR_CHECK(nvs_get_str(storageHandle, name, data, &length));
     return data;
 }
-uint8_t* Config::getBlob(const char *name){
+
+Config::BlobData Config::getBlob(const char *name){
     size_t length;
     ESP_ERROR_CHECK(nvs_get_blob(storageHandle, name, NULL, &length));
     uint8_t* data = (uint8_t*) malloc(length);
     ESP_ERROR_CHECK(nvs_get_blob(storageHandle, name, data, &length));
-    return data;
+    Config::BlobData ret;
+    ret.blob = data;
+    ret.length = length;
+    return ret;
 }
-
 
 bool Config::hasUint32(const char *name){
     uint32_t e;
@@ -114,7 +117,7 @@ void Config::setInt16(const char* name, int16_t value){
 void Config::setInt8(const char* name, int8_t value){
     ESP_ERROR_CHECK(nvs_set_i8(storageHandle, name, value));
 }
-void Config::setString(const char* name, char* content){
+void Config::setString(const char* name, const char* content){
     ESP_ERROR_CHECK(nvs_set_str(storageHandle, name, content));
 }
 void Config::setBlob(const char* name, uint8_t *buffer, int length){

@@ -1,23 +1,26 @@
-#include "painlessMesh.h"
+#include "Arduino.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "main.h"
 
 #define   MESH_PREFIX     "MegaGigaSiecESP32"
 #define   MESH_PASSWORD   "papiez2137"
 #define   MESH_PORT       5555
 
-Scheduler userScheduler; 
-painlessMesh  mesh;
+static Scheduler userScheduler; 
+static painlessMesh  mesh;
 
-void receivedCallback(uint32_t from, String &msg);
+static String currentState;
+static StateUpdateCallback callback = NULL;
+static xTaskHandle meshUpdateTask;
 
-////////////////////////////INTERFACE////////////////////////////
-typedef void (*StateUpdateCallback)(uint32_t id, uint8_t* data);
-uint8_t currentState[256];
-StateUpdateCallback callback = NULL;
-xTaskHandle meshUpdateTask;
+void meshBroadcastState(String &state){
+  currentState = state;
+  mesh.sendBroadcast(String('1') + state);
+}
 
-void setState(uint8_t *state){
-  memcpy((void*) currentState, (void*) state, 256);
-  mesh.sendBroadcast(String('1') + String((char *)currentState, 256));
+void sendBoardConfigurationChange(int id, String &state){
+  mesh.sendSingle(id, String('2') + state);
 }
 
 void setStateUpdateCallback(StateUpdateCallback newCb){
@@ -32,34 +35,36 @@ uint32_t getCurrentID(){
   return mesh.getNodeId();
 }
 
+void receivedCallback( uint32_t from, String &msg ) {
+  DT_INFO("Received from %u msg=%s\n", from, msg.c_str());
+
+  switch(msg.c_str()[0]) {
+  case '0':
+    mesh.sendSingle(from, String('1') + currentState);
+    break;
+  case '1':
+    if(callback)
+      callback(from, String(msg.c_str() + 1), false);
+    break;
+  case '2':
+    if(callback)
+      callback(from, String(msg.c_str() + 1), true);
+    break;
+  }
+}
+
+static void meshLoop(void *pvParameters) {
+  while (1) {
+    mesh.update();
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+  }
+}
+
 void meshInit(){
   //Setup code here:
   mesh.setDebugMsgTypes( ERROR | STARTUP );  
   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
   mesh.onReceive(&receivedCallback);
 
-
-  // Loop replacement
-  xTaskCreate([](void* unused){
-    for(;;){
-      mesh.update();
-      vTaskDelay(100 / portTICK_PERIOD_MS);
-    }
-  }, "Mesh Updates", 2 * 1024, NULL, configMAX_PRIORITIES-1, &meshUpdateTask);
-}
-////////////////////////////INTERFACE////////////////////////////
-
-
-void receivedCallback( uint32_t from, String &msg ) {
-  Serial.printf("Received from %u msg=%s\n", from, msg.c_str());
-
-  switch(msg.c_str()[0]) {
-  case '0':
-    mesh.sendSingle(from, String('1') + String((char *)currentState, 256));
-    break;
-  case '1':
-    if(callback)
-      callback(from, (uint8_t*) msg.c_str() + 1);
-    break;
-  }
+  xTaskCreate(meshLoop, "Mesh Loop", 40*1024, NULL, configMAX_PRIORITIES - 1, &meshUpdateTask);
 }
